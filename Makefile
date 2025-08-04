@@ -20,7 +20,7 @@ all: tidy format build add-copyright
 
 .PHONY: build
 build: tidy # 编译源码，依赖 tidy 目标自动添加/移除依赖包.
-	@go build -v -o $(OUTPUT_DIR)/center $(PROJ_ROOT_DIR)/cmd/center/main.go
+	@go build -v -o $(OUTPUT_DIR)/opsx-center $(PROJ_ROOT_DIR)/cmd/opsx-center/main.go
 
 .PHONY: format
 format: # 格式化 Go 源码.
