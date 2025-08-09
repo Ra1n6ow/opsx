@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/ra1n6ow/opsx/cmd/opsx-center/app/options"
+	"github.com/ra1n6ow/opsx/internal/pkg/log"
 	"github.com/ra1n6ow/opsx/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -54,6 +55,11 @@ func run(opts *options.ServerOptions) error {
 	// 如果传入 --version，则打印版本信息并退出
 	version.PrintAndExitIfRequested()
 
+	// 初始化日志
+	log.Init(logOptions())
+	// 确保日志在退出时被刷新到磁盘
+	defer log.Sync()
+
 	// 将 viper 中的配置解析到 opts.
 	if err := viper.Unmarshal(opts); err != nil {
 		return err
@@ -79,4 +85,29 @@ func run(opts *options.ServerOptions) error {
 
 	// 启动服务器
 	return server.Run()
+}
+
+// logOptions 从 viper 中读取日志配置，构建 *log.Options 并返回.
+// 注意：viper.Get<Type>() 中 key 的名字需要使用 . 分割，以跟 YAML 中保持相同的缩进.
+func logOptions() *log.Options {
+	opts := log.NewOptions()
+	if viper.IsSet("log.disable-caller") {
+		opts.DisableCaller = viper.GetBool("log.disable-caller")
+	}
+	if viper.IsSet("log.disable-stacktrace") {
+		opts.DisableStacktrace = viper.GetBool("log.disable-stacktrace")
+	}
+	if viper.IsSet("log.level") {
+		opts.Level = viper.GetString("log.level")
+	}
+	if viper.IsSet("log.format") {
+		opts.Format = viper.GetString("log.format")
+	}
+	if viper.IsSet("log.enable-color") {
+		opts.EnableColor = viper.GetBool("log.enable-color")
+	}
+	if viper.IsSet("log.output-paths") {
+		opts.OutputPaths = viper.GetStringSlice("log.output-paths")
+	}
+	return opts
 }
