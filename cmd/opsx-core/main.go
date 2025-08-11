@@ -1,9 +1,14 @@
+// Copyright 2025 JingFeng Du <jeffduuu@gmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file. The original repo for
+// this file is https://github.com/Ra1n6ow/opsx.
+
 package main
 
 import (
 	"os"
 
-	"github.com/ra1n6ow/opsx/cmd/opsx-center/app"
+	"github.com/ra1n6ow/opsx/cmd/opsx-core/app"
 	// 导入 automaxprocs 包，可以在程序启动时自动设置 GOMAXPROCS 配置，
 	// 使其与 Linux 容器的 CPU 配额相匹配。
 	// 这避免了在容器中运行时，因默认 GOMAXPROCS 值不合适导致的性能问题，
@@ -14,7 +19,7 @@ import (
 // Go 程序的默认入口函数。阅读项目代码的入口函数.
 func main() {
 	// 创建迷你博客命令
-	command := app.NewOpsxCenterCommand()
+	command := app.NewOpsxCoreCommand()
 
 	// 执行命令并处理错误
 	if err := command.Execute(); err != nil {

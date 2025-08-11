@@ -6,6 +6,8 @@ COMMON_SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 PROJ_ROOT_DIR := $(abspath $(shell cd $(COMMON_SELF_DIR)/ && pwd -P))
 # 构建产物、临时文件存放目录
 OUTPUT_DIR := $(PROJ_ROOT_DIR)/_output
+# 定义 protobuf 文件的根目录
+APIROOT := $(PROJ_ROOT_DIR)/pkg/api
 
 # ==============================================================================
 # 定义版本相关变量
@@ -43,7 +45,7 @@ all: tidy format build add-copyright
 
 .PHONY: build
 build: tidy # 编译源码，依赖 tidy 目标自动添加/移除依赖包.
-	@go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/opsx-center $(PROJ_ROOT_DIR)/cmd/opsx-center/main.go
+	@go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/opsx-core $(PROJ_ROOT_DIR)/cmd/opsx-core/main.go
 
 .PHONY: format
 format: # 格式化 Go 源码.
@@ -60,3 +62,15 @@ tidy: # 自动添加/移除依赖包.
 .PHONY: clean
 clean: # 清理构建产物、临时文件等.
 	@-rm -vrf $(OUTPUT_DIR)
+
+.PHONY: protoc
+protoc: # 编译 protobuf 文件.
+	@echo "===========> Generate protobuf files"
+	@protoc                                              \
+		--proto_path=$(APIROOT)                          \
+		--proto_path=$(PROJ_ROOT_DIR)/third_party/protobuf    \
+		--go_out=paths=source_relative:$(APIROOT)        \
+		--go-grpc_out=paths=source_relative:$(APIROOT)   \
+		$(shell find $(APIROOT) -name *.proto)
+	@echo "===========> Inject custom tags"
+	@protoc-go-inject-tag -input="$(APIROOT)/core/v1/*.pb.go"

@@ -4,20 +4,25 @@ go 1.24.3
 
 require (
 	github.com/gosuri/uitable v0.0.4
+	github.com/prometheus/common v0.65.0
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.7
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/automaxprocs v1.6.0
 	go.uber.org/zap v1.27.0
+	google.golang.org/grpc v1.74.2
+	google.golang.org/protobuf v1.36.6
 	k8s.io/apimachinery v0.33.3
 )
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/go-kratos/kratos/v2 v2.8.4 // indirect
+	github.com/prometheus/client_model v0.6.2 // indirect
+	golang.org/x/net v0.40.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250804133106-a7a43d27e69b // indirect
-	google.golang.org/grpc v1.74.2 // indirect
-	google.golang.org/protobuf v1.36.6 // indirect
+	k8s.io/utils v0.0.0-20250604170112-4c0f3b243397 // indirect
 )
 
 require (

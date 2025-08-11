@@ -1,3 +1,8 @@
+// Copyright 2025 JingFeng Du <jeffduuu@gmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file. The original repo for
+// this file is https://github.com/Ra1n6ow/opsx.
+
 package app
 
 import (
@@ -14,8 +19,8 @@ const (
 	// defaultConfigDir 定义放置 opsx 项目配置的默认目录.
 	defaultConfigDir = ".opsx"
 
-	// defaultConfigName 指定 opsx-center 服务的默认配置文件名.
-	defaultConfigName = "opsx-center.yaml"
+	// defaultConfigName 指定 opsx-core 服务的默认配置文件名.
+	defaultConfigName = "opsx-core.yaml"
 )
 
 // onInitialize 设置需要读取的配置文件名、环境变量，并将其内容读取到 viper 中.
