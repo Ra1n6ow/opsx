@@ -15,9 +15,9 @@ import (
 )
 
 func (h *Handler) Healthz(ctx context.Context, req *emptypb.Empty) (*corev1.HealthzResponse, error) {
-	status := corev1.ServiceStatus_Healthy
 	return &corev1.HealthzResponse{
-		Status:    &status, // 使用指针，确保即使是零值也会显示
+		// 使用 Enum() 方法直接获取常量指针
+		Status:    corev1.ServiceStatus_Healthy.Enum(),
 		Timestamp: time.Now().Format(time.DateTime),
 	}, nil
 }
