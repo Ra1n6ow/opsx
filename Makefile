@@ -71,6 +71,9 @@ protoc: # 编译 protobuf 文件.
 		--proto_path=$(PROJ_ROOT_DIR)/third_party/protobuf    \
 		--go_out=paths=source_relative:$(APIROOT)        \
 		--go-grpc_out=paths=source_relative:$(APIROOT)   \
+		--grpc-gateway_out=allow_delete_body=true,paths=source_relative:$(APIROOT) \
+		--openapiv2_out=$(PROJ_ROOT_DIR)/api/openapi \
+		--openapiv2_opt=allow_delete_body=true,logtostderr=true \
 		$(shell find $(APIROOT) -name *.proto)
 	@echo "===========> Inject custom tags"
 	@protoc-go-inject-tag -input="$(APIROOT)/core/v1/*.pb.go"

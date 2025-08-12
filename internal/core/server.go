@@ -6,11 +6,17 @@
 package core
 
 import (
+	"context"
+	"errors"
 	"net"
+	"net/http"
 	"time"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	genericoptions "github.com/ra1n6ow/opsxstack/pkg/options"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	handler "github.com/ra1n6ow/opsx/internal/core/handler/grpc"
 	"github.com/ra1n6ow/opsx/internal/pkg/log"
@@ -35,6 +41,7 @@ type Config struct {
 	JWTKey      string
 	Expiration  time.Duration
 	GRPCOptions *genericoptions.GRPCOptions
+	HTTPOptions *genericoptions.HTTPOptions
 }
 
 // UnionServer 定义一个联合服务器. 根据 ServerMode 决定要启动的服务器类型.
@@ -74,5 +81,45 @@ func (cfg *Config) NewUnionServer() (*UnionServer, error) {
 func (s *UnionServer) Run() error {
 	// 打印一条日志，用来提示 GRPC 服务已经起来，方便排障
 	log.Infow("Start to listening the incoming requests on grpc address", "addr", s.cfg.GRPCOptions.Addr)
-	return s.srv.Serve(s.lis)
+	// 协程启动 gRPC 服务，避免阻塞主线程
+	// 先启动 gRPC 服务，再启动 gRPC-Gateway 服务.
+	go s.srv.Serve(s.lis)
+
+	dialOptions := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+
+	// 创建一个 gRPC 客户端连接
+	conn, err := grpc.NewClient(s.cfg.GRPCOptions.Addr, dialOptions...)
+	if err != nil {
+		return err
+	}
+
+	// gwmux 是 grpc-gateway 的 ServeMux 实例，实现了 ServeHTTP 方法，
+	// 可以作为 Handler 使用，处理 HTTP 请求.
+	gwmux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions: protojson.MarshalOptions{
+			// 设置序列化 protobuf 数据时，枚举类型的字段以数字格式输出.
+			// 否则，默认会以字符串格式输出，跟枚举类型定义不一致，带来理解成本.
+			UseEnumNumbers: true,
+			// 只对有明确设置的字段显示零值，而不是全部字段
+			EmitUnpopulated: false,
+		},
+	}))
+	// 注册 Core 服务到 gwmux，处理 HTTP 请求.
+	if err := corev1.RegisterCoreHandler(context.Background(), gwmux, conn); err != nil {
+		return err
+	}
+
+	// 启动 gRPC-Gateway HTTP 服务
+	log.Infow("Start to listening the incoming requests", "protocol", "http", "addr", s.cfg.HTTPOptions.Addr)
+	httpsrv := &http.Server{
+		Addr: s.cfg.HTTPOptions.Addr,
+		// 使用 gwmux 作为 Handler，处理 HTTP 请求.
+		Handler: gwmux,
+	}
+
+	if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+
+	return nil
 }

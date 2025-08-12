@@ -21,8 +21,8 @@ enum ServiceStatus {
 // HealthzResponse 表示健康检查的响应结构体
 message HealthzResponse {
     // status 表示服务的健康状态
-    // @gotags: json:"status"
-    ServiceStatus status = 1;
+    // 当为指针时（即使指向零值），字段也会显示在 JSON 中. 当指针为 nil 时，字段不会显示在 JSON 中.
+    optional ServiceStatus status = 1;
 
     // timestamp 表示请求的时间戳
     string timestamp = 2; 

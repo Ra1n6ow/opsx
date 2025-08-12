@@ -15,8 +15,9 @@ import (
 )
 
 func (h *Handler) Healthz(ctx context.Context, req *emptypb.Empty) (*corev1.HealthzResponse, error) {
+	status := corev1.ServiceStatus_Healthy
 	return &corev1.HealthzResponse{
-		Status:    corev1.ServiceStatus_Healthy,
+		Status:    &status, // 使用指针，确保即使是零值也会显示
 		Timestamp: time.Now().Format(time.DateTime),
 	}, nil
 }

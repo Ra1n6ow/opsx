@@ -14,6 +14,8 @@
 package v1
 
 import (
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -32,9 +34,14 @@ var File_core_v1_core_proto protoreflect.FileDescriptor
 
 const file_core_v1_core_proto_rawDesc = "" +
 	"\n" +
-	"\x12core/v1/core.proto\x12\x02v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x15core/v1/healthz.proto2@\n" +
-	"\x04Core\x128\n" +
-	"\aHealthz\x12\x16.google.protobuf.Empty\x1a\x13.v1.HealthzResponse\"\x00B,Z*github.com/ra1n6ow/opsx/pkg/api/core/v1;v1b\x06proto3"
+	"\x12core/v1/core.proto\x12\x02v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x15core/v1/healthz.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2~\n" +
+	"\x04Core\x12v\n" +
+	"\aHealthz\x12\x16.google.protobuf.Empty\x1a\x13.v1.HealthzResponse\">\x92A+\n" +
+	"\f服务治理\x12\x12服务健康检查*\aHealthz\x82\xd3\xe4\x93\x02\n" +
+	"\x12\b/healthzB\xef\x01\x92A\xbf\x01\x12\x95\x01\n" +
+	"\ropsx-core API\";\n" +
+	"\x04opsx\x12\x1fhttps://github.com/Ra1n6ow/opsx\x1a\x12jeffduuu@gmail.com*B\n" +
+	"\vMIT License\x123https://github.com/Ra1n6ow/opsx/blob/master/LICENSE2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ*github.com/ra1n6ow/opsx/pkg/api/core/v1;v1b\x06proto3"
 
 var file_core_v1_core_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),   // 0: google.protobuf.Empty

@@ -38,6 +38,8 @@ type ServerOptions struct {
 	Expiration time.Duration `json:"expiration" mapstructure:"expiration"`
 	// GRPC 配置
 	GRPCOptions *genericoptions.GRPCOptions `json:"grpc" mapstructure:"grpc"`
+	// HTTP 配置
+	HTTPOptions *genericoptions.HTTPOptions `json:"http" mapstructure:"http"`
 }
 
 // NewServerOptions 创建带有默认值的 ServerOptions 实例.
@@ -47,8 +49,10 @@ func NewServerOptions() *ServerOptions {
 		JWTKey:      "Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iB31",
 		Expiration:  2 * time.Hour,
 		GRPCOptions: genericoptions.NewGRPCOptions(),
+		HTTPOptions: genericoptions.NewHTTPOptions(),
 	}
 	opts.GRPCOptions.Addr = ":7701"
+	opts.HTTPOptions.Addr = ":7700"
 	return opts
 }
 
@@ -61,6 +65,7 @@ func (o *ServerOptions) AddFlags(fs *pflag.FlagSet) {
 	// 参数名称为 `--expiration`，默认值为 o.Expiration
 	fs.DurationVar(&o.Expiration, "expiration", o.Expiration, "The expiration duration of JWT tokens.")
 	o.GRPCOptions.AddFlags(fs)
+	o.HTTPOptions.AddFlags(fs)
 }
 
 // Validate 校验 ServerOptions 中的选项是否合法.
@@ -82,6 +87,11 @@ func (o *ServerOptions) Validate() error {
 		errs = append(errs, o.GRPCOptions.Validate()...)
 	}
 
+	// 如果是 gRPC-Gateway 模式或 Gin 模式，校验 HTTP 配置
+	if stringsutil.StringIn(o.ServerMode, []string{core.GRPCGatewayServerMode, core.GinServerMode}) {
+		errs = append(errs, o.HTTPOptions.Validate()...)
+	}
+
 	// 合并所有错误并返回
 	return utilerrors.NewAggregate(errs)
 }
@@ -93,5 +103,6 @@ func (o *ServerOptions) Config() (*core.Config, error) {
 		JWTKey:      o.JWTKey,
 		Expiration:  o.Expiration,
 		GRPCOptions: o.GRPCOptions,
+		HTTPOptions: o.HTTPOptions,
 	}, nil
 }

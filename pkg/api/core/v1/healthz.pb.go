@@ -81,8 +81,8 @@ func (ServiceStatus) EnumDescriptor() ([]byte, []int) {
 type HealthzResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// status 表示服务的健康状态
-	// @gotags: json:"status"
-	Status ServiceStatus `protobuf:"varint,1,opt,name=status,proto3,enum=v1.ServiceStatus" json:"status"`
+	// /gotags: json:"status"
+	Status *ServiceStatus `protobuf:"varint,1,opt,name=status,proto3,enum=v1.ServiceStatus,oneof" json:"status,omitempty"`
 	// timestamp 表示请求的时间戳
 	Timestamp string `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	// message 表示可选的状态消息，描述服务健康的更多信息
@@ -122,8 +122,8 @@ func (*HealthzResponse) Descriptor() ([]byte, []int) {
 }
 
 func (x *HealthzResponse) GetStatus() ServiceStatus {
-	if x != nil {
-		return x.Status
+	if x != nil && x.Status != nil {
+		return *x.Status
 	}
 	return ServiceStatus_Healthy
 }
@@ -146,11 +146,12 @@ var File_core_v1_healthz_proto protoreflect.FileDescriptor
 
 const file_core_v1_healthz_proto_rawDesc = "" +
 	"\n" +
-	"\x15core/v1/healthz.proto\x12\x02v1\"t\n" +
-	"\x0fHealthzResponse\x12)\n" +
-	"\x06status\x18\x01 \x01(\x0e2\x11.v1.ServiceStatusR\x06status\x12\x1c\n" +
+	"\x15core/v1/healthz.proto\x12\x02v1\"\x84\x01\n" +
+	"\x0fHealthzResponse\x12.\n" +
+	"\x06status\x18\x01 \x01(\x0e2\x11.v1.ServiceStatusH\x00R\x06status\x88\x01\x01\x12\x1c\n" +
 	"\ttimestamp\x18\x02 \x01(\tR\ttimestamp\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage*+\n" +
+	"\amessage\x18\x03 \x01(\tR\amessageB\t\n" +
+	"\a_status*+\n" +
 	"\rServiceStatus\x12\v\n" +
 	"\aHealthy\x10\x00\x12\r\n" +
 	"\tUnhealthy\x10\x01B)Z'github.com/ra1n6ow/opsx/pkg/api/core/v1b\x06proto3"
@@ -187,6 +188,7 @@ func file_core_v1_healthz_proto_init() {
 	if File_core_v1_healthz_proto != nil {
 		return
 	}
+	file_core_v1_healthz_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
