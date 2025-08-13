@@ -8,7 +8,7 @@ package errno
 import (
 	"net/http"
 
-	"github.com/ra1n6ow/opsxstack/pkg/errorsx"
+	"github.com/ra1n6ow/opsx/pkg/errorsx"
 )
 
 var (

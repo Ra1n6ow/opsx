@@ -45,7 +45,7 @@ all: tidy format build add-copyright
 
 .PHONY: build
 build: tidy # 编译源码，依赖 tidy 目标自动添加/移除依赖包.
-	@go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/opsx-core $(PROJ_ROOT_DIR)/cmd/opsx-core/main.go
+	@go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/opsx-usercenter $(PROJ_ROOT_DIR)/cmd/opsx-usercenter/main.go
 
 .PHONY: format
 format: # 格式化 Go 源码.
@@ -76,4 +76,4 @@ protoc: # 编译 protobuf 文件.
 		--openapiv2_opt=allow_delete_body=true,logtostderr=true \
 		$(shell find $(APIROOT) -name *.proto)
 	@echo "===========> Inject custom tags"
-	@protoc-go-inject-tag -input="$(APIROOT)/core/v1/*.pb.go"
+	@protoc-go-inject-tag -input="$(APIROOT)/usercenter/v1/*.pb.go"

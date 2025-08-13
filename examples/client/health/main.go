@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	corev1 "github.com/ra1n6ow/opsx/pkg/api/core/v1"
+	ucv1 "github.com/ra1n6ow/opsx/pkg/api/usercenter/v1"
 )
 
 var (
@@ -38,7 +38,7 @@ func main() {
 	defer conn.Close() // 确保在函数结束时关闭连接，避免资源泄漏
 
 	// 创建 Core 客户端
-	client := corev1.NewCoreClient(conn) // 使用连接创建一个 Core 的 gRPC 客户端实例
+	client := ucv1.NewUsercenterClient(conn) // 使用连接创建一个 Core 的 gRPC 客户端实例
 
 	// 设置上下文，带有 3 秒的超时时间
 	// context.WithTimeout 用于设置调用的超时时间，防止请求无限等待

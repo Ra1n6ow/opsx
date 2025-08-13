@@ -11,12 +11,12 @@ tmp_dir = "/tmp/air"
 pre_cmd = []
 # 普通的shell命令。你也可以使用`make`。
 cmd = "make build"
-#cmd = "make build BINS=mb-apiserver"
+#cmd = "make build BINS=opsx-usercenter"
 # cmd = "go build -o _output/core -v cmd/core/main.go" 
 # ^C后要运行的命令数组
 post_cmd = []
 # 从`cmd`得到的二进制文件。
-#bin = "_output/platforms/linux/amd64/mb-apiserver"
+#bin = "_output/platforms/linux/amd64/opsx-usercenter"
 bin = "_output/core"
 # 自定义二进制文件，可以在运行应用程序时设置环境变量。
 #full_bin = "APP_ENV=dev APP_USER=air ./tmp/main"

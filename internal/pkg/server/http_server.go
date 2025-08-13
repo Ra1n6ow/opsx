@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	genericoptions "github.com/ra1n6ow/opsxstack/pkg/options"
+	genericoptions "github.com/ra1n6ow/opsx/pkg/options"
 
 	"github.com/ra1n6ow/opsx/internal/pkg/log"
 )

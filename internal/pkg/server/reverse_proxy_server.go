@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	genericoptions "github.com/ra1n6ow/opsxstack/pkg/options"
+	genericoptions "github.com/ra1n6ow/opsx/pkg/options"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/credentials/insecure"

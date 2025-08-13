@@ -4,7 +4,7 @@ import (
 	"context"
 	"net"
 
-	genericoptions "github.com/ra1n6ow/opsxstack/pkg/options"
+	genericoptions "github.com/ra1n6ow/opsx/pkg/options"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"

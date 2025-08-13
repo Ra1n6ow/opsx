@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/ra1n6ow/opsx/internal/pkg/errno"
-	"github.com/ra1n6ow/opsxstack/pkg/errorsx"
+	"github.com/ra1n6ow/opsx/pkg/errorsx"
 )
 
 func main() {
