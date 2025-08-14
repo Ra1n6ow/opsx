@@ -6,6 +6,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
+	mw "github.com/ra1n6ow/opsx/internal/pkg/middleware/grpc"
 	"github.com/ra1n6ow/opsx/internal/pkg/server"
 	handler "github.com/ra1n6ow/opsx/internal/usercenter/handler/grpc"
 	ucv1 "github.com/ra1n6ow/opsx/pkg/api/usercenter/v1"
@@ -23,9 +24,19 @@ var _ server.Server = (*grpcServer)(nil)
 
 // NewGRPCServerOr 创建并初始化 gRPC 或者 gRPC +  gRPC-Gateway 服务器.
 func (c *ServerConfig) NewGRPCServerOr() (server.Server, error) {
+	// 配置 gRPC 服务器选项，包括拦截器链
+	serverOptions := []grpc.ServerOption{
+		// 注意拦截器顺序！
+		grpc.ChainUnaryInterceptor(
+			// 请求 ID 拦截器
+			mw.RequestIDInterceptor(),
+		),
+	}
+
 	// 创建 gRPC 服务器
 	grpcsrv, err := server.NewGRPCServer(
 		c.cfg.GRPCOptions,
+		serverOptions,
 		func(s grpc.ServiceRegistrar) {
 			ucv1.RegisterUsercenterServer(s, handler.NewHandler())
 		},

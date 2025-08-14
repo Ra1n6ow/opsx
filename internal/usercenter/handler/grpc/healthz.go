@@ -11,10 +11,12 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	"github.com/ra1n6ow/opsx/internal/pkg/log"
 	ucv1 "github.com/ra1n6ow/opsx/pkg/api/usercenter/v1"
 )
 
 func (h *Handler) Healthz(ctx context.Context, req *emptypb.Empty) (*ucv1.HealthzResponse, error) {
+	log.W(ctx).Infow("Healthz handler is called", "method", "Healthz", "status", "healthy")
 	return &ucv1.HealthzResponse{
 		// 使用 Enum() 方法直接获取常量指针
 		Status:    ucv1.ServiceStatus_Healthy.Enum(),
